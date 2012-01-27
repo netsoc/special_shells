@@ -1,0 +1,13 @@
+#!/usr/bin/env perl
+
+# $Id: bold,v 1.3 2007/09/07 08:31:28 eoinmcl Exp $
+# Program to explain to a disabled user why they can't log in.
+
+use strict;
+use warnings;
+
+print <<MESSAGE;
+Your account has been disabled because you violated the Netsoc AUP.
+Please see http://www.netsoc.tcd.ie/about/policy/aup for details of the AUP.
+MESSAGE
+sleep 5;

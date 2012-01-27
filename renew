@@ -1,0 +1,38 @@
+#!/usr/bin/env perl
+
+# $Id: renew,v 1.2 2007/10/21 10:51:52 nosmo Exp $
+# Program to explain to a disabled user why they can't log in.
+
+use strict;
+use warnings;
+use File::Copy;
+
+if($ENV{SHELL} ne "/usr/local/spoon/bin/renew") {
+    print "Don't run this as a normal person you fool!\n";
+    exit 0;
+} 
+
+#system("ps -fu `whoami` | mail -s \"Renew troubles\" root\@netsoc.tcd.ie");
+
+if (!(-e $ENV{"HOME"}."/.procmailrcbackup")) {
+    copy($ENV{"HOME"}."/.procmailrc", $ENV{"HOME"}."/.procmailrcbackup");
+}
+open PROCMAILRC,">".$ENV{"HOME"}."/.procmailrc";
+print PROCMAILRC ":0\n/dev/null";
+close PROCMAILRC;
+
+print STDERR <<MESSAGE;
+Your account has been disabled (but not removed) because you haven't renewed
+your Netsoc membership.  All your files are still nice and safe.
+
+Please visit http://www.netsoc.tcd.ie/signup.php to renew your
+membership or visit the Netsoc room (http://www.netsoc.tcd.ie/services/room.php)
+and fill in the membership form.  You'll also need to pay us one Euro.
+
+If you don't want to renew your membership and need to retrieve anything from
+matrix please mail help\@netsoc.tcd.ie and one of our administrators will
+arrange to make it available for you.
+
+Only TCD Staff and Students are eligible for a Matrix account.
+MESSAGE
+sleep 5;

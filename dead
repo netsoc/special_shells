@@ -1,0 +1,14 @@
+#!/usr/bin/env perl
+
+# $Id: dead,v 1.1.1.1 2005/12/26 00:38:49 bbrazil Exp $
+# Program to explain to a disabled user why they can't log in.
+
+use strict;
+use warnings;
+
+print <<MESSAGE;
+Your account has been permanently disabled because of repeat AUP violations.
+You will never be allowed to have an account on any Netsoc machine ever again.
+Now go away; I don't want to hear your wailing and gnashing of teeth.
+MESSAGE
+sleep 5;

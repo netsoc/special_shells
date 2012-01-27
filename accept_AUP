@@ -1,0 +1,77 @@
+#!/usr/bin/env python
+# This is the shell that new users get until they accept the AUP. 
+# This implies that anyone with a valid shell must have accepted the AUP.
+
+__author__ = 'Stephen Shaw <stesh@netsoc.tcd.ie>'
+
+import sys
+import os
+from subprocess import call
+
+if __file__ != os.environ['SHELL']:
+    print "Don't run this as a normal person you fool!"
+    sys.exit(0)
+
+from nd import *
+
+try:
+    print(
+'''
+\033[1mWelcome to Netsoc.
+
+You must agree to the terms of the Netsoc Acceptable Usage Policy (AUP), which 
+can be found at http://www.netsoc.tcd.ie/aup/, before you can use your Netsoc account.
+
+You should only have to complete this process once. If this prompt appears the
+next time you log in, make sure you have entered your password correctly.
+
+Contact support@netsoc.tcd.ie if you require assistance.
+    ''')
+
+    raw_input("\033[0;0mPress Enter to view the AUP (use page up/page down to scroll, and press 'q' when finished)")
+    call(['/usr/local/cube/bin/secure_less', '/usr/local/cube/share/aup'])
+
+    answer = raw_input('\nDo you accept the terms of the AUP? ')
+
+    while answer != 'yes' and answer != 'no':
+        answer = raw_input('Please answer yes or no: ').lower()
+
+    if answer == 'no':
+        print '\nYou cannot use your netsoc account unless you agree to the AUP.'
+        sys.exit(1)
+
+    print '\nSetting up your login shell...'
+
+    # Give three attempts to bind to LDAP before dying
+    for i in range(3):
+        try:
+            myself = User.myself()
+            myself.loginShell = User.default_login_shell
+    
+            print('''\033[1m
+
+    Congratulations! Your netsoc account is ready to use.
+The next time you log in, you will not see this message.
+
+Have fun.
+            \033[0;0m''')
+            sys.exit(0)
+
+        except ldap.INVALID_CREDENTIALS:
+            print 'Incorrect password\n'
+
+        except ldap.UNWILLING_TO_PERFORM, e:
+            # Most likely because no password at all was entered
+            print e[0]['info']
+            sys.exit(1)
+
+        except Exception, e:
+            print 'An unknown error occurred: %s' % e
+            sys.exit(1)
+
+except KeyboardInterrupt:
+    print
+    sys.exit(1)
+
+except EOFError:
+    sys.exit(1)

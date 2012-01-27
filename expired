@@ -1,0 +1,21 @@
+#!/usr/bin/env perl
+
+# $Id: expired,v 1.2 2007/06/21 10:42:22 eoinmcl Exp $
+# Program to explain to a disabled user why they can't log in.
+
+use strict;
+use warnings;
+
+print <<MESSAGE;
+
+Your account has expired because you are no longer eligible to hold a spoon
+account; only TCD Staff and Students are eligible.
+
+You can still join Netsoc (http://www.netsoc.tcd.ie/signup.php) and attend our
+events, but we cannot give you an account.  If you need to retrieve anything
+from spoon please mail help\@netsoc.tcd.ie and one of our administrators will
+arrange to make it available for you.
+
+Thank you for being a member of Netsoc; we hope you have enjoyed it.
+MESSAGE
+sleep 5;
